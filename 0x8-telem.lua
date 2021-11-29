@@ -1,8 +1,9 @@
 ----------------------------------------------------------
--- Written by Farley Farley
--- farley <at> neonsurge __dot__ com
--- From: https://github.com/AndrewFarley/Taranis-XLite-Q7-Lua-Dashboard
--- Please feel free to submit issues, feedback, etc.
+-- Updated by Mario Hennenberger
+-- from: https://github.com/nullx8/FreedomTx-Lua-Dashboard-TBS-Crossfire
+--
+-- Initial release by Farley Farley
+-- fetched from : https://github.com/AndrewFarley/Taranis-XLite-Q7-Lua-Dashboard
 ----------------------------------------------------------
 
 
@@ -53,71 +54,7 @@ local function setAnimationIncrement()
   animationIncrement = math.fmod(math.ceil(math.fmod(getTime() / 100, 2) * 8), 4)
 end
 
-local function drawPropellor(start_x, start_y, invert)
-  local animationIncrementLocal = animationIncrement
-  if invert == true then
-    animationIncrementLocal = (animationIncrementLocal - 3) * -1
-    animationIncrementLocal = animationIncrementLocal + 3
-    if animationIncrementLocal > 3 then
-      animationIncrementLocal = animationIncrementLocal - 4
-    end
-  end
   
-  -- Animated Quadcopter propellors
-  if ((isArmed == 0 or isArmed == 2) and invert == false) or (isArmed == 1 and animationIncrementLocal == 0) then
-    -- Top left Propellor
-    lcd.drawLine(start_x + 1, start_y + 9, start_x + 9, start_y + 1, SOLID, FORCE)
-    lcd.drawLine(start_x + 1, start_y + 10, start_x + 8, start_y + 1, SOLID, FORCE)
-  elseif isArmed == 1 and animationIncrementLocal == 1 then
-    -- Top left Propellor
-    lcd.drawLine(start_x, start_y + 5, start_x + 9, start_y + 5, SOLID, FORCE)
-    lcd.drawLine(start_x, start_y + 4, start_x + 9, start_y + 6, SOLID, FORCE)
-  elseif ((isArmed == 0 or isArmed == 2) and invert == true) or (isArmed == 1 and animationIncrementLocal == 2) then
-    -- Top left Propellor
-    lcd.drawLine(start_x + 1, start_y + 1, start_x + 9, start_y + 9, SOLID, FORCE)
-    lcd.drawLine(start_x + 1, start_y + 2, start_x + 10, start_y + 9, SOLID, FORCE)
-  elseif isArmed == 1 and animationIncrementLocal == 3 then
-    -- Top left Propellor
-    lcd.drawLine(start_x + 5, start_y, start_x + 5, start_y + 10, SOLID, FORCE)
-    lcd.drawLine(start_x + 6, start_y, start_x + 4, start_y + 10, SOLID, FORCE)
-  end
-end
-
--- A sexy helper to draw a 30x30 quadcopter (since X7 can not draw bitmap)
-local function drawQuadcopter(start_x,start_y)
-  
-  -- Top left to bottom right
-  lcd.drawLine(start_x + 4, start_y + 4, start_x + 26, start_y + 26, SOLID, FORCE)
-  lcd.drawLine(start_x + 4, start_y + 5, start_x + 25, start_y + 26, SOLID, FORCE)
-  lcd.drawLine(start_x + 5, start_y + 4, start_x + 26, start_y + 25, SOLID, FORCE)
-  
-  -- Bottom left to top right
-  lcd.drawLine(start_x + 4, start_y + 26, start_x + 26, start_y + 4, SOLID, FORCE)
-  lcd.drawLine(start_x + 4, start_y + 25, start_x + 25, start_y + 4, SOLID, FORCE)
-  lcd.drawLine(start_x + 5, start_y + 26, start_x + 26, start_y + 5, SOLID, FORCE)
-  
-  -- Middle of Quad
-  lcd.drawRectangle(start_x + 11, start_y + 11, 9, 9, SOLID)
-  lcd.drawRectangle(start_x + 12, start_y + 12, 7, 7, SOLID)
-  lcd.drawRectangle(start_x + 13, start_y + 13, 5, 5, SOLID)
-
-  -- ARMED text
-  if isArmed == 1 then
-    lcd.drawText(start_x + 3, start_y + 12, "ARMED", SMLSIZE + BLINK)
-  end
-  
-  -- Top-left propellor
-  drawPropellor(start_x, start_y, false)
-  -- Bottom-Right Propellor
-  drawPropellor(start_x + 20, start_y + 20, false)
-  -- Top-Right Propellor
-  drawPropellor(start_x + 20, start_y, true)
-  -- Bottom-left Propellor
-  drawPropellor(start_x, start_y + 20, true)
-  
-end
-
-
 -- Sexy voltage helper
 local function drawTransmitterVoltage(start_x,start_y,voltage)
   
@@ -161,7 +98,7 @@ local function drawFlightTimer(start_x, start_y)
   local percentageLeft = 0
   
   lcd.drawRectangle( start_x, start_y, timerWidth, 10 )
-  lcd.drawText( start_x + 2, start_y + 2, "Fly Timer", SMLSIZE )
+  lcd.drawText( start_x + 2, start_y + 2, "Arm Time", SMLSIZE )
   lcd.drawRectangle( start_x, start_y + 10, timerWidth, timerHeight )
 
   if timerLeft < 0 then
@@ -208,14 +145,16 @@ local function drawRSSI(start_x, start_y)
   local percentageLeft = 0
   
   lcd.drawRectangle( start_x, start_y, timerWidth, 10 )
-  lcd.drawText( start_x + 2, start_y + 2, "RSSI:", SMLSIZE)
-  if rssi < 50 then
-    lcd.drawText( start_x + 23, start_y + 2, rssi, SMLSIZE + BLINK)
+  lcd.drawText( start_x + 2, start_y + 2, "L:", SMLSIZE)
+  if rssi < 80 then
+    lcd.drawText( start_x + 9, start_y + 2, rssi, SMLSIZE + BLINK)
+    lcd.drawText( start_x + 25, start_y + 2, getValue('TQly'), SMLSIZE + BLINK)
   else
-    lcd.drawText( start_x + 23, start_y + 2, rssi, SMLSIZE)
+    lcd.drawText( start_x + 9, start_y + 2, rssi, SMLSIZE)
   end
   lcd.drawRectangle( start_x, start_y + 10, timerWidth, timerHeight )
-  
+
+
   
   if rssi > 0 then
     lcd.drawLine(start_x + 1,  start_y + 20, start_x + 1,  start_y + 23, SOLID, FORCE)
@@ -338,7 +277,7 @@ end
 
 local function drawVoltageText(start_x, start_y)
   -- First, try to get voltage from VFAS...
-  local voltage = getValue('VFAS')
+  local voltage = getValue('RxBt')
   -- local voltage = getValue('Cels')   -- For miniwhoop seems more accurate
   -- TODO: if that failed, get voltage from somewhere else from my bigger quads?  Or rebind the voltage to VFAS?
   
@@ -385,7 +324,7 @@ local function drawVoltageImage(start_x, start_y)
   lcd.drawText(start_x + batteryWidth + 4, start_y + 47, "3.3v", SMLSIZE)
   
   -- Now draw how full our voltage is...
-  local voltage = getValue('VFAS')
+  local voltage = getValue('RxBt')
   voltageLow = 3.3
   voltageHigh = 4.35
   voltageIncrement = ((voltageHigh - voltageLow) / 47)
@@ -402,7 +341,8 @@ end
 local function gatherInput(event)
   
   -- Get our RSSI
-  rssi = getRSSI()
+  rssi = getValue('RQly')
+  rssi2 = getValue('TQly')
 
   -- Get the seconds left in our timer
   timerLeft = getValue('timer1')
@@ -412,13 +352,13 @@ local function gatherInput(event)
   end
 
   -- Get our current transmitter voltage
-  currentVoltage = getValue('tx-voltage')
+  currentVoltage = getValue('RxBt')
 
   -- Armed / Disarm / Buzzer switch
   armed = getValue('sa')
 
   -- Our "mode" switch
-  mode = getValue('sb')
+  mode = getValue('FM')
 
   -- Do some event handling to figure out what button(s) were pressed  :)
   if event > 0 then
@@ -460,15 +400,15 @@ end
 
 
 local function getModeText()
-  local modeText = "Unknown"
-  if mode < -512 then
-    modeText = "Air Mode"
-  elseif mode > -100 and mode < 100 then
-    modeText = "Acro"
-  elseif mode > 512 then
-    modeText = "Horizon"
-  end
-  return modeText
+--  local modeText = mode
+--  if mode < -512 then
+--    modeText = "Air Mode"
+--  elseif mode > -100 and mode < 100 then
+--    modeText = "Acro"
+--  elseif mode > 512 then
+--    modeText = "Horizon"
+--  end
+  return getValue('FM')
 end
 
 local function run(event)
@@ -497,13 +437,18 @@ local function run(event)
   -- Draw our model name centered at the top of the screen
   lcd.drawText( 64 - math.ceil((#modelName * 5) / 2),0, modelName, SMLSIZE)
 
-  -- Draw our mode centered at the top of the screen just under that...
   modeText = getModeText()
-  lcd.drawText( 64 - math.ceil((#modeText * 5) / 2),9, modeText, SMLSIZE)
+  lcd.drawText( 44 ,10, modeText, SMLSIZE)
 
-  -- Draw our sexy quadcopter animated (if armed) from scratch
-  drawQuadcopter(47, 16)
-  
+
+  -- amps Current
+  lcd.drawText( 51 ,32, string.format("%.2f", getValue('Curr')), MIDSIZE)
+  lcd.drawText( 51 + 31, 28, 'A', MEDSIZE)
+
+  -- capacity Used
+  lcd.drawText( 59 ,40, getValue('Capa'), SMLSIZE)
+
+
   -- Draw our sexy voltage
   drawTransmitterVoltage(0,0, currentVoltage)
 
