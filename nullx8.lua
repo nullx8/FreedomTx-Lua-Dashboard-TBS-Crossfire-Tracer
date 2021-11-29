@@ -278,15 +278,13 @@ end
 local function drawVoltageText(start_x, start_y)
   -- First, try to get voltage from VFAS...
   local voltage = getValue('RxBt')
-  -- local voltage = getValue('Cels')   -- For miniwhoop seems more accurate
-  -- TODO: if that failed, get voltage from somewhere else from my bigger quads?  Or rebind the voltage to VFAS?
   
   if tonumber(voltage) >= 10 then
-    lcd.drawText(start_x,start_y,string.format("%.2f", voltage),MIDSIZE)
+    lcd.drawText(start_x+4,start_y,string.format("%.2f", voltage),MIDSIZE)
   else
-    lcd.drawText(start_x + 7,start_y,string.format("%.2f", voltage),MIDSIZE)
+    lcd.drawText(start_x + 11,start_y,string.format("%.2f", voltage),MIDSIZE)
   end
-  lcd.drawText(start_x + 31, start_y + 4, 'v', MEDSIZE)
+  lcd.drawText(start_x + 31, start_y -1, 'v', MEDSIZE)
 end
 
 local function drawVoltageImage(start_x, start_y)
@@ -317,11 +315,11 @@ local function drawVoltageImage(start_x, start_y)
   lcd.drawLine(start_x + batteryWidth - math.ceil(batteryWidth / 4), start_y + 44, start_x + batteryWidth - 1, start_y + 44, SOLID, 0)
   
   -- Voltage top
-  lcd.drawText(start_x + batteryWidth + 4, start_y + 0, "4.35v", SMLSIZE)
+  lcd.drawText(start_x + batteryWidth + 4, start_y + 0, "4.3", SMLSIZE)
   -- Voltage middle
-  lcd.drawText(start_x + batteryWidth + 4, start_y + 24, "3.82v", SMLSIZE)
+  lcd.drawText(start_x + batteryWidth + 4, start_y + 24, "3.8", SMLSIZE)
   -- Voltage bottom
-  lcd.drawText(start_x + batteryWidth + 4, start_y + 47, "3.3v", SMLSIZE)
+  lcd.drawText(start_x + batteryWidth + 4, start_y + 47, "3.3", SMLSIZE)
   
   -- Now draw how full our voltage is...
   local voltage = getValue('RxBt')
@@ -435,22 +433,30 @@ local function run(event)
   lcd.drawLine(0, 7, 128, 7, SOLID, FORCE)
 
   -- Draw our model name centered at the top of the screen
-  lcd.drawText( 64 - math.ceil((#modelName * 5) / 2),0, modelName, SMLSIZE)
+ lcd.drawText( 64 - math.ceil((#modelName * 5) / 2),0, modelName, SMLSIZE)
 
   modeText = getModeText()
-  lcd.drawText( 44 ,10, modeText, SMLSIZE)
-
-
-  -- amps Current
-  lcd.drawText( 51 ,32, string.format("%.2f", getValue('Curr')), MIDSIZE)
-  lcd.drawText( 51 + 31, 28, 'A', MEDSIZE)
+-- this doesnt work for some reason
+--  lcd.drawText( 64 - math.ceil((#modeText * 5) / 2),0, modeText, SMLSIZE)
+ lcd.drawText( 46 ,10, modeText, SMLSIZE)
 
   -- capacity Used
-  lcd.drawText( 59 ,40, getValue('Capa'), SMLSIZE)
+  if tonumber(getValue('Capa')) >= 100 then
+    lcd.drawText(55-4, 36, getValue('Capa'), MIDSIZE)
+  else
+    lcd.drawText(55, 36, getValue('Capa'), MIDSIZE)
+  end
+  lcd.drawText( 55 + 20, 35, 'A', MEDSIZE)
 
+  -- amps Current
+  lcd.drawText( 67 ,43, string.format("%.1f", getValue('Curr')), SMLSIZE)
+
+  -- Volts Current
+  --  lcd.drawText( 85 ,35, string.format("%.2f", getValue('RxBt')), MIDSIZE)
+  --  lcd.drawText( 88 + 20, 33, 'V', MEDSIZE)
 
   -- Draw our sexy voltage
-  drawTransmitterVoltage(0,0, currentVoltage)
+  drawTransmitterVoltage(4,0, currentVoltage)
 
   -- Draw our flight timer
   drawFlightTimer(84, 34)
@@ -466,6 +472,18 @@ local function run(event)
   
   -- Draw voltage battery graphic
   drawVoltageImage(3, 10)
+
+  -- GPS
+  if tonumber(getValue('Sats')) >4 then
+    -- display GPS Data
+    lcd.drawText( 34 ,19, string.format("%.1f", getValue('GSpd')), MIDSIZE)
+    lcd.drawText( 34 ,31, getValue('Alt'), SMLSIZE)
+    lcd.drawText( 72 ,16, getValue('Sats'), MIDSIZE)
+  elseif tonumber(getValue('Sats')) >4 then
+    lcd.drawText( 0 ,0, "... GPS", SMLSIZE)
+  else
+    lcd.drawText( 0 ,0, "No GPS", SMLSIZE)
+  end
   
   return 0
 end
