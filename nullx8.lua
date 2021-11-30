@@ -9,7 +9,10 @@
 
 ------- GLOBALS -------
 -- The model name when it can't detect a model name from the handset
+
 local modelName = "Unknown"
+local oldTime={0,0,0,0,0,0}
+local Time={0,0,0,0,0,0}
 
 local lowVoltage = 13.8
 local currentVoltage = 14.0
@@ -30,8 +33,7 @@ local rssi = 0
 -- For debugging / development
 local lastMessage = "None"
 local lastNumberMessage = "0"
-    lastsaynbattpercent=200
-
+local lastsaynbattpercent=200
 
 -- Batt
 local max_batt = 4.2
@@ -53,33 +55,40 @@ local function convertVoltageToPercentage(voltage)
   return curVolPercent
 end
 
+function round(num, decimals)
+  local mult = 10^(decimals or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
 -- A little animation / frame counter to help us with various animations
 local function setAnimationIncrement()
   animationIncrement = math.fmod(math.ceil(math.fmod(getTime() / 100, 2) * 8), 4)
 end
 
-local function SayBattPercent()  
-  battpercent = getValue('Bat_')
-  if (battpercent < (lastsaynbattpercent-10)) then --only say in 10 % steps
+local function SayBattPercent(battp)  
+  if (battp =="") then
+    battp = 0
+  end
+  if (battp < (lastsaynbattpercent-5)) then --only say in 10 % steps
 
     Time[6] = Time[6] + (getTime() - oldTime[6]) 
         
     if Time[6]> 700 then --and only say if battpercent 10 % below for more than 10sec
-      lastsaynbattpercent=(round(battpercent*0.1)*10)
+      lastsaynbattpercent=battp
       Time[6] = 0
-      playNumber(round(lastsaynbattpercent), 13, 0)
+      playNumber(lastsaynbattpercent, 13, 0)
       if lastsaynbattpercent <= 10 then 
         playFile("batcrit.wav") 
       end
     end
-
     oldTime[6] = getTime() 
 
   else    
     Time[6] = 0
     oldTime[6] = getTime() 
-  end
-
+    if battp < 20 then 
+      playFile("batcrit.wav") 
+    end  end
 end
 
 -- Sexy voltage helper
@@ -350,8 +359,8 @@ local function drawVoltageImage(start_x, start_y)
   
   -- Now draw how full our voltage is...
   local voltage = math.ceil((getValue('RxBt')/4))
-  voltageLow = 3.3
-  voltageHigh = 4.35
+  voltageLow = (3.3 * 4)
+  voltageHigh = (4.35 *4)
   voltageIncrement = ((voltageHigh - voltageLow) / 47)
   
   local offset = 0  -- Start from the bottom up
@@ -423,7 +432,6 @@ local function gatherInput(event)
 
 end
 
-
 local function getModeText()
 --  local modeText = mode
 --  if mode < -512 then
@@ -483,8 +491,7 @@ local function run(event)
   --  lcd.drawText( 88 + 20, 33, 'V', MEDSIZE)
 
   -- Draw our sexy voltage
-  drawTransmitterVoltage(4,0, getValue('RxBt'))
---  batteryWidget(4,0)
+--  drawTransmitterVoltage(4,0, getValue('RxBt'))
 
   -- Draw our flight timer
   drawFlightTimer(84, 34)
@@ -492,16 +499,19 @@ local function run(event)
   -- Draw RSSI
   drawRSSI(84, 8)
   
+  -- draw sending power in RSSIBar
+  lcd.drawText( 87, 19, getValue('TPW2'), SMLSIZE)
+
   -- Draw Time in Top Right
   drawTime()
-  
+
   -- Draw Voltage bottom middle
   drawVoltageText(45,50)
   
   -- Draw voltage battery graphic
   drawVoltageImage(3, 10)
 
-  SayBattPercent()
+  SayBattPercent(getValue('Bat_'))
   
   -- GPS
   if tonumber(getValue('Sats')) >4 then
