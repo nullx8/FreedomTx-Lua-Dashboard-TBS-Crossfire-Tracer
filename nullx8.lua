@@ -30,6 +30,7 @@ local rssi = 0
 -- For debugging / development
 local lastMessage = "None"
 local lastNumberMessage = "0"
+    lastsaynbattpercent=200
 
 
 -- Batt
@@ -55,6 +56,30 @@ end
 -- A little animation / frame counter to help us with various animations
 local function setAnimationIncrement()
   animationIncrement = math.fmod(math.ceil(math.fmod(getTime() / 100, 2) * 8), 4)
+end
+
+local function SayBattPercent()  
+  battpercent = getValue('Bat_')
+  if (battpercent < (lastsaynbattpercent-10)) then --only say in 10 % steps
+
+    Time[6] = Time[6] + (getTime() - oldTime[6]) 
+        
+    if Time[6]> 700 then --and only say if battpercent 10 % below for more than 10sec
+      lastsaynbattpercent=(round(battpercent*0.1)*10)
+      Time[6] = 0
+      playNumber(round(lastsaynbattpercent), 13, 0)
+      if lastsaynbattpercent <= 10 then 
+        playFile("batcrit.wav") 
+      end
+    end
+
+    oldTime[6] = getTime() 
+
+  else    
+    Time[6] = 0
+    oldTime[6] = getTime() 
+  end
+
 end
 
 -- Sexy voltage helper
@@ -476,6 +501,8 @@ local function run(event)
   -- Draw voltage battery graphic
   drawVoltageImage(3, 10)
 
+  SayBattPercent()
+  
   -- GPS
   if tonumber(getValue('Sats')) >4 then
     -- display GPS Data
