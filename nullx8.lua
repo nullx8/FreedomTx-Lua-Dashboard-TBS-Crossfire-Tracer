@@ -43,18 +43,6 @@ local total_min_bat = 5
 local total_max_curr = 0
 
 ------- HELPERS -------
--- Helper converts voltage to percentage of voltage for a sexy battery percent
-local function convertVoltageToPercentage(voltage)
-  local curVolPercent = math.ceil(((((highVoltage - voltage) / (highVoltage - lowVoltage)) - 1) * -1) * 100)
-  if curVolPercent < 0 then
-    curVolPercent = 0
-  end
-  if curVolPercent > 100 then
-    curVolPercent = 100
-  end
-  return curVolPercent
-end
-
 function round(num, decimals)
   local mult = 10^(decimals or 0)
   return math.floor(num * mult + 0.5) / mult
@@ -109,7 +97,7 @@ local function drawTransmitterVoltage(start_x,start_y,voltage)
   lcd.drawLine(start_x + batteryWidth + 2, start_y + 1, start_x + batteryWidth + 2, start_y + 4, SOLID, FORCE) -- Positive Nub
 
   -- Battery Percentage (after battery)
-  local curVolPercent = convertVoltageToPercentage(voltage)
+  local curVolPercent = getValue('Bat_')
   if curVolPercent < 20 then
     lcd.drawText(start_x + batteryWidth + 5, start_y, curVolPercent.."%", SMLSIZE + BLINK)
   else
