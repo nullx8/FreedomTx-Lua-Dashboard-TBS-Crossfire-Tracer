@@ -69,7 +69,7 @@ local function SayBattPercent(battp)
   if (battp =="") then
     battp = 0
   end
-  if (getValue('Capa') < 10) then
+  if (getValue('Capa') < 2) then
     -- reset last percent (assume new battery)
     lastsaynbattpercent = 200
   end
@@ -79,14 +79,14 @@ local function SayBattPercent(battp)
     Time[6] = Time[6] + (getTime() - oldTime[6]) 
         
     if Time[6]> 700 then --and only say if battpercent 10 % below for more than 10sec
-      lastsaynbattpercent=battp
       Time[6] = 0
-      if (battp !=0) then
+      if (battp ~=0) then
+        lastsaynbattpercent=battp
         playNumber(lastsaynbattpercent, 13, 0)
         if lastsaynbattpercent <= 10 then 
           playFile("batcrit.wav") 
         end
-      End
+      end
     end
     oldTime[6] = getTime() 
 
@@ -95,7 +95,8 @@ local function SayBattPercent(battp)
     oldTime[6] = getTime() 
     if battp < 20 then 
       playFile("batcrit.wav") 
-    end  end
+    end
+  end
 end
 
 -- Sexy voltage helper
