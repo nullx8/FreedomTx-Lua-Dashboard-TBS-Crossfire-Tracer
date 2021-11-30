@@ -10,14 +10,10 @@
 ------- GLOBALS -------
 -- The model name when it can't detect a model name from the handset
 local modelName = "Unknown"
--- I'm using 8 NiMH Batteries in my QX7, which is 1.1v low, and ~1.325v high
-local lowVoltage = 8.8
-local currentVoltage = 10.6
-local highVoltage = 10.6
--- For an X-Lite you will need...
-local lowVoltage = 6.6
-local currentVoltage = 8.4
-local highVoltage = 8.4
+
+local lowVoltage = 13.8
+local currentVoltage = 14.0
+local highVoltage = 16.8
 -- For our timer tracking
 local timerLeft = 0
 local maxTimerValue = 0
@@ -35,6 +31,13 @@ local rssi = 0
 local lastMessage = "None"
 local lastNumberMessage = "0"
 
+
+-- Batt
+local max_batt = 4.2
+local min_batt = 3.3
+local total_max_bat = 0
+local total_min_bat = 5
+local total_max_curr = 0
 
 ------- HELPERS -------
 -- Helper converts voltage to percentage of voltage for a sexy battery percent
@@ -54,11 +57,10 @@ local function setAnimationIncrement()
   animationIncrement = math.fmod(math.ceil(math.fmod(getTime() / 100, 2) * 8), 4)
 end
 
-  
 -- Sexy voltage helper
 local function drawTransmitterVoltage(start_x,start_y,voltage)
   
-  local batteryWidth = 17
+  local batteryWidth = 12
   
   -- Battery Outline
   lcd.drawRectangle(start_x, start_y, batteryWidth + 2, 6, SOLID)
@@ -322,7 +324,7 @@ local function drawVoltageImage(start_x, start_y)
   lcd.drawText(start_x + batteryWidth + 4, start_y + 47, "3.3", SMLSIZE)
   
   -- Now draw how full our voltage is...
-  local voltage = getValue('RxBt')
+  local voltage = math.ceil((getValue('RxBt')/4))
   voltageLow = 3.3
   voltageHigh = 4.35
   voltageIncrement = ((voltageHigh - voltageLow) / 47)
@@ -456,7 +458,8 @@ local function run(event)
   --  lcd.drawText( 88 + 20, 33, 'V', MEDSIZE)
 
   -- Draw our sexy voltage
-  drawTransmitterVoltage(4,0, currentVoltage)
+  drawTransmitterVoltage(4,0, getValue('RxBt'))
+--  batteryWidget(4,0)
 
   -- Draw our flight timer
   drawFlightTimer(84, 34)
