@@ -6,14 +6,15 @@ a simple Dashboard i made for my own use for the TBS Mambo Radio
 
 Features (Current)
 - show essential informations like
- - Battery Voltage, Current Draw, Capacity used, Timer1, Flight Mode, LQ as number and Bar, TX Power
- - if GPS FIX also shows SPeed/TopSpeed,sat count and Altitude
+- Battery Voltage, Current Draw, Capacity used, Timer1, Flight Mode, LQ as number and Bar, TX Power
+- if GPS FIX also shows SPeed/TopSpeed,sat count and Altitude
 
-- announces Battery level in Percentage (constantly until 3mAh passed then every 10 sec.)
+- Audio info abattery level (5% steps, every 10 sec for first 3mAh used)
 - makes audio sound (cricket) when LQ starts to fluctuate (early warning for Failsafe)
 - dashboard showing GPS data (Speed, Altitude once fix)
- - records TopSpeed (will be displayed on disarm or when fix lost)
+- records TopSpeed (will be displayed on disarm or when fix lost)
 
+- auto-reset values on battery change (when Current draw resets, no need to restart ever)
 
 let me know if you want me to add somethings
 Credit: Recycled some code from Andrew Farley
