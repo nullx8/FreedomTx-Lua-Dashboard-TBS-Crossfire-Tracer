@@ -7,7 +7,7 @@ let me know if you want me to add somethings
 Credit: Recycled some code from Andrew Farley
 
 Idle screen (No GPS)
-![ec2 image tag example](./screenshot1.jpg)
+![ec2 image tag example](./screenshot_noGPS.jpg)
 
 ToDo:
 - use global values (not re-fetching values)
