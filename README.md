@@ -9,9 +9,6 @@ Credit: Recycled some code from Andrew Farley
 
 ToDo:
 - use global values (not re-fetching values)
-- show power usage
-- show max power/speed
-- show GPS info (if avaiable)
 - better number format
 - get rid of multiple default definitions
 - not show anything if values are zero
@@ -20,6 +17,8 @@ ToDo:
 - mini battery and Battery Icon Broken
 
 Changelog:
+- showtopspeed
+- show power usage
 - add GPS data (altitude, sat count, speed)
 - add mAh used (current Draw as small number)
 - use LQ instead of RSSI
