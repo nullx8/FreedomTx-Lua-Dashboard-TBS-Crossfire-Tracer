@@ -4,8 +4,10 @@ a simple Dashboard i made for my own use for the TBS Mambo Radio
 (also works on other OpenTX / Edge TX Radios from other manufacturers)
 
 let me know if you want me to add somethings
-
 Credit: Recycled some code from Andrew Farley
+
+Idle screen (No GPS)
+![ec2 image tag example](./screenshot1.jpg)
 
 ToDo:
 - use global values (not re-fetching values)
