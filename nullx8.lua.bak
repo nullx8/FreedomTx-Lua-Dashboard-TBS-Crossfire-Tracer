@@ -521,7 +521,7 @@ local function run(event)
 	  end
 	end
 	lcd.drawText( 34 ,31, getValue('Alt'), SMLSIZE)
-    lcd.drawText( 72 ,16, getValue('Sats'), SMLSIZE)
+    lcd.drawText( 72 ,16, getValue('Sats'), MIDSIZE)
   elseif tonumber(getValue('Sats')) >4 then
     lcd.drawText( 0 ,0, "... GPS", SMLSIZE)
     if lasttopspeed > 0 then
