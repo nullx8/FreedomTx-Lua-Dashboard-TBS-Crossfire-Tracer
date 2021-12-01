@@ -17,6 +17,7 @@ ToDo:
 - mini battery and Battery Icon Broken
 
 Changelog:
+- auto reset key values with new battery [checkForNewBattery()]
 - showtopspeed
 - show power usage
 - add GPS data (altitude, sat count, speed)

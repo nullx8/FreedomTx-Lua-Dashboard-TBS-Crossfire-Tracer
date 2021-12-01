@@ -54,15 +54,19 @@ local function setAnimationIncrement()
   animationIncrement = math.fmod(math.ceil(math.fmod(getTime() / 100, 2) * 8), 4)
 end
 
+local function checkForNewBattery()
+  if (getValue('Capa') < 2) then
+    -- if capacity used below 2 we just assume the battery has ben changed
+	-- reset helper tmp values
+	lastsaynbattpercent = 200 -- makes sure battery is bigger than possible to allow rewrite by battery function
+	lasttopspeed = 0 -- reset last recorded top speed to 0
+  end
+end
+
 local function SayBattPercent(battp)  
   if (battp =="") then
     battp = 0
   end
-  if (getValue('Capa') < 2) then
-    -- reset last percent (assume new battery)
-    lastsaynbattpercent = 200
-  end
-
   if (battp < (lastsaynbattpercent-5)) then --only say in 10 % steps
 
     Time[6] = Time[6] + (getTime() - oldTime[6]) 
@@ -515,7 +519,7 @@ local function run(event)
     -- display GPS Data
     lcd.drawText( 34 ,19, string.format("%.1f", getValue('GSpd')), MIDSIZE)
     if getValue('GSpd') > lasttopspeed then
-	  if getValue('Sats') > 5 then
+	  if getValue('Sats') > 6 then
 		-- only update topspeed with proper fix
 		lasttopspeed = getValue('GSpd')
 	  end
@@ -535,6 +539,8 @@ local function run(event)
 	  lcd.drawText( 34 ,19, string.format("%.1f", lasttopspeed), MIDSIZE)
     end
   end
+
+  checkForNewBattery()
   
   return 0
 end
