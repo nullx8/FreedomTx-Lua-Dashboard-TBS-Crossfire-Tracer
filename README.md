@@ -20,10 +20,10 @@ let me know if you want me to add somethings
 Credit: Recycled some code from Andrew Farley
 
 Idle screen (No GPS)
-![ec2 image tag example](./screenshot_noGPS.jpg)
+[ec2 image tag example](./screenshot_noGPS.jpg)
 
 In Flight (with GPS data)
-![ec2 image tag example](./screenshoot_withGPS.jpg)
+[ec2 image tag example](./screenshoot_withGPS.jpg)
 
 ToDo:
 - replace battery graphic for Orientation (if GPS)
