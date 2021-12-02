@@ -55,8 +55,8 @@ local function setAnimationIncrement()
 end
 
 local function checkForNewBattery()
-  if (getValue('Capa') < 2) then
-    -- if capacity used below 2 we just assume the battery has ben changed
+  if getValue('Capa') > 0 and getValue('Capa') < 2 then
+    -- if capacity used below 2 but not zero we just assume the battery has ben changed
 	-- reset helper tmp values
 	lastsaynbattpercent = 200 -- makes sure battery is bigger than possible to allow rewrite by battery function
 	lasttopspeed = 0 -- reset last recorded top speed to 0
