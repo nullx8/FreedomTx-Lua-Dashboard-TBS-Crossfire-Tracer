@@ -525,7 +525,10 @@ local function run(event)
 	  end
 	end
 	lcd.drawText( 34 ,31, getValue('Alt'), SMLSIZE)
-    lcd.drawText( 72 ,16, getValue('Sats'), SMLSIZE)
+--    lcd.drawText( 72 ,16, getValue('Sats'), SMLSIZE)
+-- put sat count on top right
+    lcd.drawText( 0 ,0, "GPS", SMLSIZE)
+    lcd.drawText( 16 ,0, getValue('Sats'), SMLSIZE)
   else
     lcd.drawText( 0 ,0, "No GPS", SMLSIZE)
     if lasttopspeed > 0 then
