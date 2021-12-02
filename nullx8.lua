@@ -519,19 +519,13 @@ local function run(event)
     -- display GPS Data
     lcd.drawText( 34 ,19, string.format("%.1f", getValue('GSpd')), MIDSIZE)
     if getValue('GSpd') > lasttopspeed then
-      if getValue('Sats') > 6 then
-        -- only update topspeed with proper fix
-        lasttopspeed = getValue('GSpd')
-      end
-    end
-    lcd.drawText( 34 ,31, getValue('Alt'), SMLSIZE)
+	  if getValue('Sats') > 6 then
+		-- only update topspeed with proper fix
+		lasttopspeed = getValue('GSpd')
+	  end
+	end
+	lcd.drawText( 34 ,31, getValue('Alt'), SMLSIZE)
     lcd.drawText( 72 ,16, getValue('Sats'), SMLSIZE)
-  elseif tonumber(getValue('Sats')) >4 then
-    lcd.drawText( 0 ,0, "... GPS", SMLSIZE)
-    if lasttopspeed > 0 then
-	  lcd.drawText( 27 ,19, "Top: ", MIDSIZE)
-	  lcd.drawText( 34 ,19, string.format("%.1f", lasttopspeed), MIDSIZE)
-    end
   else
     lcd.drawText( 0 ,0, "No GPS", SMLSIZE)
     if lasttopspeed > 0 then

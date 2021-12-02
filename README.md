@@ -22,6 +22,8 @@ Credit: Recycled some code from Andrew Farley
 Idle screen (No GPS)
 ![ec2 image tag example](./screenshot_noGPS.jpg)
 
+In Flight (with GPS)
+![ec2 image tag example](./screenshoot_withGPS.jpg)
 ToDo:
 - replace battery graphic for Orientation (if GPS)
 - replace battery graphic for Statistics(if Nno GPS)
