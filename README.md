@@ -22,8 +22,9 @@ Credit: Recycled some code from Andrew Farley
 Idle screen (No GPS)
 ![ec2 image tag example](./screenshot_noGPS.jpg)
 
-In Flight (with GPS)
+In Flight (with GPS data)
 ![ec2 image tag example](./screenshoot_withGPS.jpg)
+
 ToDo:
 - replace battery graphic for Orientation (if GPS)
 - replace battery graphic for Statistics(if Nno GPS)
@@ -32,10 +33,12 @@ ToDo:
 - get rid of multiple default definitions
 - not show anything if values are zero
 - auto center Flight mode (FM)
-- hide all GPS information if no GPS connected
 - mini battery and Battery Icon Broken
 
 Changelog:
+- reset values on >0 and <3mA
+- remember last Cpacity value
+- hide all GPS information if no GPS connected
 - auto reset key values with new battery [checkForNewBattery()]
 - showtopspeed
 - show power usage
