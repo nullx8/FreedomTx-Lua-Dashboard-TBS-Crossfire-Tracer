@@ -36,6 +36,8 @@ local lastNumberMessage = "0"
 local lastsaynbattpercent=200
 local lasttopspeed=0
 local lastCapa=0
+local lastMaxAmp=0
+
 -- Batt
 local max_batt = 4.2
 local min_batt = 3.3
@@ -435,7 +437,10 @@ local function gatherInput(event)
 end
 
 local function getModeText()
---  local modeText = mode
+  local modeText = getValue('FM')
+  if modeText == 0 then
+    modeText = "no clue!"
+  end
 --  if mode < -512 then
 --    modeText = "Air Mode"
 --  elseif mode > -100 and mode < 100 then
@@ -443,7 +448,7 @@ local function getModeText()
 --  elseif mode > 512 then
 --    modeText = "Horizon"
 --  end
-  return getValue('FM')
+  return modeText
 end
 
 local function run(event)
@@ -490,8 +495,15 @@ local function run(event)
   lcd.drawText( 55 + 20, 35, 'A', MEDSIZE)
 
   -- amps Current
-  lcd.drawText( 67 ,43, string.format("%.1f", getValue('Curr')), SMLSIZE)
-
+  if lastMaxAmp < getValue('Curr') then
+    lastMaxAmp = getValue('Curr')
+  end
+  if getValue('Curr') >0 then 
+    lcd.drawText( 67 ,43, string.format("%.1f", getValue('Curr')), SMLSIZE)
+  else 
+    -- show max value
+    lcd.drawText( 67 ,43, string.format("%.1f", lastMaxAmp, SMLSIZE))
+  end
   -- Volts Current
   --  lcd.drawText( 85 ,35, string.format("%.2f", getValue('RxBt')), MIDSIZE)
   --  lcd.drawText( 88 + 20, 33, 'V', MEDSIZE)

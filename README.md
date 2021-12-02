@@ -20,14 +20,16 @@ let me know if you want me to add somethings
 Credit: Recycled some code from Andrew Farley
 
 Idle screen (No GPS)
-[ec2 image tag example](./screenshot_noGPS.jpg)
+
+![ec2 image tag example](./screenshot_noGPS.jpg)
 
 In Flight (with GPS data)
-[ec2 image tag example](./screenshoot_withGPS.jpg)
+
+![ec2 image tag example](./screenshoot_withGPS.jpg)
 
 ToDo:
 - replace battery graphic for Orientation (if GPS)
-- replace battery graphic for Statistics(if Nno GPS)
+- replace battery graphic for Statistics(if No GPS)
 - use global values (not re-fetching values)
 - better number format
 - get rid of multiple default definitions
@@ -36,6 +38,8 @@ ToDo:
 - mini battery and Battery Icon Broken
 
 Changelog:
+- store max amp used
+- add Flight mode Placeholder
 - reset values on >0 and <3mA
 - remember last Cpacity value
 - hide all GPS information if no GPS connected
