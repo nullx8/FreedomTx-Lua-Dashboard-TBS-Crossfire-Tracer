@@ -35,7 +35,7 @@ local lastMessage = "None"
 local lastNumberMessage = "0"
 local lastsaynbattpercent=200
 local lasttopspeed=0
-
+local lastCapa=0
 -- Batt
 local max_batt = 4.2
 local min_batt = 3.3
@@ -60,6 +60,7 @@ local function checkForNewBattery()
 	-- reset helper tmp values
 	lastsaynbattpercent = 200 -- makes sure battery is bigger than possible to allow rewrite by battery function
 	lasttopspeed = 0 -- reset last recorded top speed to 0
+    lastCapa =0 -- reset battery usage
   end
 end
 
@@ -477,10 +478,14 @@ local function run(event)
  lcd.drawText( 46 ,10, modeText, SMLSIZE)
 
   -- capacity Used
-  if tonumber(getValue('Capa')) >= 100 then
-    lcd.drawText(55-4, 36, getValue('Capa'), MIDSIZE)
+  if getValue('Capa') > 0 then 
+    -- only update if not zero
+	lastCapa = getValue('Capa')
+  end 
+  if tonumber(lastCapa) >= 100 then
+    lcd.drawText(55-4, 36, lastCapa, MIDSIZE)
   else
-    lcd.drawText(55, 36, getValue('Capa'), MIDSIZE)
+    lcd.drawText(55, 36, lastCapa, MIDSIZE)
   end
   lcd.drawText( 55 + 20, 35, 'A', MEDSIZE)
 
@@ -519,7 +524,7 @@ local function run(event)
     -- display GPS Data
     lcd.drawText( 34 ,19, string.format("%.1f", getValue('GSpd')), MIDSIZE)
     if getValue('GSpd') > lasttopspeed then
-	  if getValue('Sats') > 6 then
+	  if getValue('Sats') > 7 then
 		-- only update topspeed with proper fix
 		lasttopspeed = getValue('GSpd')
 	  end
