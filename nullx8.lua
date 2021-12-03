@@ -536,7 +536,7 @@ local function run(event)
     -- display GPS Data
     lcd.drawText( 34 ,19, string.format("%.1f", getValue('GSpd')), MIDSIZE)
     if getValue('GSpd') > lasttopspeed then
-	  if getValue('Sats') > 7 then
+	  if getValue('Sats') >= 8 then
 		-- only update topspeed with proper fix
 		lasttopspeed = getValue('GSpd')
 	  end
